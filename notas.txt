@@ -1,0 +1,31 @@
+Video 1.
+
+Para iniciar la aplicación en la consola tipear: node app.js
+
+Cada cambio no olvidarse de reiniciar la aplicación.
+
+Con nodemon no vamos a necesitar reiniciar la aplicación por cada cambio.
+
+npm i -g .... //i: install, -g:global
+
+para correr la app ahora usamos: nodemon app.js
+
+morgan para loguear los servicios que se usaron.
+
+morgan('short'): descripción corta del log.
+morgan('combined'): descripción mas completa del log.
+
+
+Video 3.
+
+Middleware to help u to get data.
+app.use(bodyParser.urlencoded({extended: false}));
+
+Video 5.
+Para deployar una app en heroku y tu rama de git no es master ejecutar.
+
+git push heroku x:master
+x = rama distinta de "master" del repositorio de git
+
+https://github.com/express-validator/express-validator
+https://express-validator.github.io/docs/
