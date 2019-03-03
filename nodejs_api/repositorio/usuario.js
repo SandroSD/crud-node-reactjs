@@ -9,7 +9,7 @@ function getConnection(){
 function getAll(callback){
 	let users = [];
 	const connection = getConnection();
-	const queryString = "SELECT * FROM users";
+	const queryString = "SELECT * FROM usuario";
 	connection.query(queryString, (err, rows, fields)=>{
 		if(err){
 			callback({data: err, status: 500});
@@ -28,7 +28,7 @@ function getAll(callback){
 function get(id, callback){
 	let user = "";
 	const connection = getConnection();
-	const queryString = "SELECT * FROM users WHERE id = ?";
+	const queryString = "SELECT * FROM usuario WHERE id = ?";
 	connection.query(queryString, [id], (err, rows, fields) => {
 		if(err){
 			callback({data: err, status: 500});
@@ -44,9 +44,19 @@ function get(id, callback){
 
 function post(user, callback){
 	const connection = getConnection();
-	const queryString = "INSERT INTO users (first_name, last_name) VALUES (?, ?)";
-	connection.query(queryString, [user.first_name, user.last_name], (err, rows, fields) => {
+	const queryString = "INSERT INTO usuario (nombre, apellido, mail, celular, fechaNacimiento, calle, numero, codigoPostal) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+	connection.query(queryString, [
+		user.nombre,
+		user.apellido,
+		user.mail,
+		user.celular,
+		user.fechaNacimiento,
+		user.direccion['calle'],
+		user.direccion['numero'],
+		user.direccion['codigoPostal']
+	], (err, rows, fields) => {
 		if(err){
+			console.log("error mysql", err);
 			callback({data: err, status: 500});
 		}
 		user.id = rows.insertId;
@@ -56,8 +66,21 @@ function post(user, callback){
 
 function put(user, callback){
 	const connection = getConnection();
-	const queryString = "UPDATE users SET first_name = ?, last_name = ? WHERE id = ?";
-	connection.query(queryString, [user.first_name, user.last_name, user.id], (err, rows, fields) => {
+	const queryString = "UPDATE usuario SET nombre = ?, apellido = ?, mail = ?, celular = ?, fechaNacimiento = ?, calle = ?, numero = ?, codigoPostal = ? WHERE id = ?";
+	connection.query(queryString, [
+		user.nombre,
+		user.apellido,
+		user.mail,
+		user.celular,
+		user.fechaNacimiento,
+		user.direccion['calle'],
+		user.direccion['numero'],
+		user.direccion['codigoPostal'],
+		user.id
+	], (err, rows, fields) => {
+		console.log(user);
+		console.log(queryString);
+		console.log("err",err,"rows",rows);
 		if(err){
 			callback({data: err, status: 500});
 		}
@@ -67,7 +90,7 @@ function put(user, callback){
 
 function deletee(id, callback){
 	const connection = getConnection();
-	const queryString = "DELETE FROM users WHERE id = ?";
+	const queryString = "DELETE FROM usuario WHERE id = ?";
 	connection.query(queryString, [id], (err, rows, fields) => {
 		if(err){
 			callback({data: err, status: 500});
@@ -80,8 +103,14 @@ getDataFromDB = (row) => {
 	const user = new User();
 
 	user.id = row.id;
-	user.nombre = row.first_name;
-	user.apellido = row.last_name;
+	user.nombre = row.nombre;
+	user.apellido = row.apellido;
+	user.mail = row.mail;
+	user.celular = row.celular;
+	user.fechaNacimiento = row.fechaNacimiento;
+	user.direccion.calle = row.calle;
+	user.direccion.numero = row.numero;
+	user.direccion.codigoPostal = row.codigoPostal;
 
 	return user;
 }

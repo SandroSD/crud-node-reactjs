@@ -1,6 +1,6 @@
 function showErrors(errors, callback){
 	let mapaErrores = new Map();
-	console.log("errores", errors);
+	//console.log("errores", errors);
 	errors.map(error => {
 		let msgArray = [];
 		
