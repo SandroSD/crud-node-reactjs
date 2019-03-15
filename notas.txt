@@ -29,3 +29,6 @@ x = rama distinta de "master" del repositorio de git
 
 https://github.com/express-validator/express-validator
 https://express-validator.github.io/docs/
+
+tutorial:
+https://medium.com/javascript-in-plain-english/full-stack-mongodb-react-node-js-express-js-in-one-simple-app-6cc8ed6de274

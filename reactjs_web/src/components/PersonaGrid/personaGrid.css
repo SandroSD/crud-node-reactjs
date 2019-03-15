@@ -1,0 +1,13 @@
+.style{
+	font-size: 1em
+}
+
+#cuartoTD button{
+	margin: 0 0.25em
+}
+
+#titulo{
+	padding: 0.4em 0 0 2em;
+	font-weight: bold;
+	font-size: 18px;
+}

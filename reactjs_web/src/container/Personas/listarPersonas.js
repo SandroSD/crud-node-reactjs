@@ -1,42 +1,39 @@
 import React, { Component } from 'react';
-
-import { Row, Col, Table, Button, Card, CardHeader, CardBody, CardFooter } from 'reactstrap';
+import { Row, Col } from 'reactstrap';
+import PersonaGrid from '../../components/PersonaGrid/personaGrid';
 
 class ListarPersonas extends Component {
+	state = {
+		form: {
+			nombre: '',
+			apellido: '',
+			mail: '',
+			celular: '',
+			fechaNacimiento: '',
+			direccion: {
+				calle: '',
+				numero: '',
+				codigoPostal: ''
+			}
+		},
+		personas: []
+	}
+
+	componentDidMount() {
+		fetch("http://localhost:3003/users")
+			.then(data => data.json())
+			.then(res => {
+				const miState = {...this.state};
+				miState.personas = res;
+				this.setState(miState);
+			});
+	}
+
 	render() {
 		return (
 			<Row>
-				<Col xs={{size:9, offset:3}}>
-					<Table striped>
-						<thead style={{textAlign: "center"}}>
-							<tr>
-								<th>Nombre</th>
-								<th>Apellido</th>
-								<th>#</th>
-							</tr>
-						</thead>
-						<tbody>
-							<tr>
-								<td>a</td>
-								<td>b</td>
-								<td style={{width: "10%"}}>
-									<Button color="primary">A</Button>
-									<Button color="info">B</Button>
-									<Button color="danger">C</Button>
-								</td>
-							</tr>
-							<tr>
-								<td>e</td>
-								<td>f</td>
-								<td>g</td>
-							</tr>
-							<tr>
-								<td>h</td>
-								<td>i</td>
-								<td>j</td>
-							</tr>
-						</tbody>
-					</Table>
+				<Col xs={{size:10, offset:1}}>
+					<PersonaGrid personas={this.state.personas} />
 				</Col>
 			</Row>
 		);
