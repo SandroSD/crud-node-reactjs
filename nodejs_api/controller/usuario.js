@@ -162,7 +162,7 @@ users.delete('/user/:id', (req, res) => {
 
 getData = (req) => {
 	let user = new Usuario({
-		id: req.params.id,
+		_id: req.params._id,
 		nombre : req.body.nombre,
 		apellido : req.body.apellido,
 		mail: req.body.mail,
