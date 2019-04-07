@@ -2,7 +2,7 @@
 const { check, validationResult } = require('express-validator/check');
 const usuarioRepositorio = require('../repositorio/usuario');
 const showError = require('../extras/errors/showErrors');
-
+const mongoose = require('mongoose');
 const express = require('express');
 const users = express.Router();
 const Usuario = require('../modelos/usuario');
@@ -162,7 +162,7 @@ users.delete('/user/:id', (req, res) => {
 
 getData = (req) => {
 	let user = new Usuario({
-		_id: req.params._id,
+		_id: req.params._id ? req.params._id : mongoose.Types.ObjectId(),
 		nombre : req.body.nombre,
 		apellido : req.body.apellido,
 		mail: req.body.mail,

@@ -4,6 +4,9 @@ const app = express();
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
 const users = require('./controller/usuario');
+const mongoose = require('mongoose');
+
+mongoose.connect("mongodb://localhost:27017/mydb",{useNewUrlParser: true});
 
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(express.static('./public'));
