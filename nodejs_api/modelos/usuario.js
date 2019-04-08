@@ -13,6 +13,6 @@ const usuarioSchema = new Schema({
         numero: Number,
         codigoPostal: Number
     }
-});
+}, { versionKey: false });
 
 module.exports = mongoose.model('Usuario', usuarioSchema);
