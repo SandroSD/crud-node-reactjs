@@ -1,7 +1,4 @@
 const User = require('../modelos/usuario');
-const MongoClient = require('mongodb').MongoClient;
-const ObjectId = require('mongodb').ObjectID;
-const url = "mongodb://localhost:27017/";
 const mongoose = require('mongoose');
 
 mongoose.Promise = global.Promise;
@@ -47,22 +44,6 @@ function deletee(_id, callback) {
         if (err) throw err;
         callback({ data: null, status: 204 });
     });
-}
-
-getDataFromDB = (row) => {
-    const user = new User();
-
-    user._id = row._id;
-    user.nombre = row.nombre;
-    user.apellido = row.apellido;
-    user.mail = row.mail;
-    user.celular = row.celular;
-    user.fechaNacimiento = row.fechaNacimiento;
-    user.direccion.calle = row.calle;
-    user.direccion.numero = row.numero;
-    user.direccion.codigoPostal = row.codigoPostal;
-
-    return user;
 }
 
 module.exports = { getAll, get, post, put, deletee }
