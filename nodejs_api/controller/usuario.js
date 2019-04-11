@@ -29,134 +29,137 @@ const Usuario = require('../modelos/usuario');
 	res.status(200).json({user: user});
 });*/
 
-users.get("/users", (req, res) => {
-    usuarioRepositorio.getAll(function(result) {
-        res.status(result.status).json(result.data);
-    });
-});
+users.group('/users', (router) => {
 
-users.get("/user/:id", (req, res) => {
-    usuarioRepositorio.get(req.params.id, function(result) {
-        if (result.status === 204) {
-            res.sendStatus(result.status);
-            res.end();
-        } else {
+    router.get("", (req, res) => {
+        usuarioRepositorio.getAll(function(result) {
             res.status(result.status).json(result.data);
+        });
+    });
+
+    router.get("/:id", (req, res) => {
+        usuarioRepositorio.get(req.params.id, function(result) {
+            if (result.status === 204) {
+                res.sendStatus(result.status);
+                res.end();
+            } else {
+                res.status(result.status).json(result.data);
+            }
+        });
+    });
+
+    router.post('', [
+        check('nombre')
+        .isString().withMessage("El nombre debe contener solo letras")
+        .isLength({
+            min: 1,
+            max: 15
+        }).withMessage("El nombre debe tener una longitud de por lo menos 1 caracter y máximo 15"),
+        check('apellido')
+        .isString().withMessage("El apellido debe contener solo letras")
+        .isLength({
+            min: 1,
+            max: 20
+        }).withMessage("El apellido debe tener una longitud de por lo menos 1 caracter y máximo 20"),
+        check('mail')
+        .isEmail().withMessage("El mail no es correcto")
+        .isLength({
+            max: 25
+        }).withMessage("El mail debe tener una longitud máxima de 25 caracteres"),
+        check('celular')
+        .isNumeric().withMessage("El celular debe contener solamente números"),
+        check('fechaNacimiento')
+        .toDate().withMessage("La fecha no es correcta"),
+        check('calle')
+        .isString().withMessage("La calle debe tener solo letras")
+        .isLength({
+            min: 1,
+            max: 30
+        }).withMessage("La calle debe contener minimo 1 caracter y máximo 30"),
+        check('numero')
+        .isNumeric().withMessage("El número no puede contener letras")
+        .isLength({
+            min: 1,
+            max: 5
+        }).withMessage("El número debe tener mínimo un caracter"),
+        check('codigoPostal')
+        .isNumeric().withMessage("El código postal debe tener solo números")
+        .isLength({
+            min: 1
+        }).withMessage("El número debe tener mínimo un caracter")
+    ], (req, res) => {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            showError(errors.array(), function(result) {
+                res.status(500).json(result);
+            });
+        } else {
+            let user = getData(req);
+            usuarioRepositorio.post(user, function(result) {
+                res.status(result.status).json(result.data);
+            });
         }
     });
-});
 
-users.post('/user', [
-    check('nombre')
-    .isString().withMessage("El nombre debe contener solo letras")
-    .isLength({
-        min: 1,
-        max: 15
-    }).withMessage("El nombre debe tener una longitud de por lo menos 1 caracter y máximo 15"),
-    check('apellido')
-    .isString().withMessage("El apellido debe contener solo letras")
-    .isLength({
-        min: 1,
-        max: 20
-    }).withMessage("El apellido debe tener una longitud de por lo menos 1 caracter y máximo 20"),
-    check('mail')
-    .isEmail().withMessage("El mail no es correcto")
-    .isLength({
-        max: 25
-    }).withMessage("El mail debe tener una longitud máxima de 25 caracteres"),
-    check('celular')
-    .isNumeric().withMessage("El celular debe contener solamente números"),
-    check('fechaNacimiento')
-    .toDate().withMessage("La fecha no es correcta"),
-    check('calle')
-    .isString().withMessage("La calle debe tener solo letras")
-    .isLength({
-        min: 1,
-        max: 30
-    }).withMessage("La calle debe contener minimo 1 caracter y máximo 30"),
-    check('numero')
-    .isNumeric().withMessage("El número no puede contener letras")
-    .isLength({
-        min: 1,
-        max: 5
-    }).withMessage("El número debe tener mínimo un caracter"),
-    check('codigoPostal')
-    .isNumeric().withMessage("El código postal debe tener solo números")
-    .isLength({
-        min: 1
-    }).withMessage("El número debe tener mínimo un caracter")
-], (req, res) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-        showError(errors.array(), function(result) {
-            res.status(500).json(result);
-        });
-    } else {
-        let user = getData(req);
-        usuarioRepositorio.post(user, function(result) {
-            res.status(result.status).json(result.data);
-        });
-    }
-});
+    router.put('/:id', [
+        check('nombre')
+        .isString().withMessage("El nombre debe contener solo letras")
+        .isLength({
+            min: 1,
+            max: 15
+        }).withMessage("El nombre debe tener una longitud de por lo menos 1 caracter y máximo 15"),
+        check('apellido')
+        .isString().withMessage("El apellido debe contener solo letras")
+        .isLength({
+            min: 1,
+            max: 20
+        }).withMessage("El apellido debe tener una longitud de por lo menos 1 caracter y máximo 20"),
+        check('mail')
+        .isEmail().withMessage("El mail no es correcto")
+        .isLength({
+            max: 25
+        }).withMessage("El mail debe tener una longitud máxima de 25 caracteres"),
+        check('celular')
+        .isNumeric().withMessage("El celular debe contener solamente números"),
+        check('fechaNacimiento')
+        .toDate().withMessage("La fecha no es correcta"),
+        check('calle')
+        .isString().withMessage("La calle debe tener solo letras")
+        .isLength({
+            min: 1,
+            max: 30
+        }).withMessage("La calle debe contener minimo 1 caracter y máximo 30"),
+        check('numero')
+        .isNumeric().withMessage("El número no puede contener letras")
+        .isLength({
+            min: 1,
+            max: 5
+        }).withMessage("El número debe tener mínimo un caracter"),
+        check('codigoPostal')
+        .isNumeric().withMessage("El código postal debe tener solo números")
+        .isLength({
+            min: 1
+        }).withMessage("El número debe tener mínimo un caracter")
+    ], (req, res) => {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            showError(errors.array(), function(result) {
+                res.status(500).json(result);
+            });
+        } else {
+            let user = getData(req);
+            usuarioRepositorio.put(user, function(result) {
+                res.status(result.status);
+                res.end();
+            });
+        }
+    });
 
-users.put('/user/:id', [
-    check('nombre')
-    .isString().withMessage("El nombre debe contener solo letras")
-    .isLength({
-        min: 1,
-        max: 15
-    }).withMessage("El nombre debe tener una longitud de por lo menos 1 caracter y máximo 15"),
-    check('apellido')
-    .isString().withMessage("El apellido debe contener solo letras")
-    .isLength({
-        min: 1,
-        max: 20
-    }).withMessage("El apellido debe tener una longitud de por lo menos 1 caracter y máximo 20"),
-    check('mail')
-    .isEmail().withMessage("El mail no es correcto")
-    .isLength({
-        max: 25
-    }).withMessage("El mail debe tener una longitud máxima de 25 caracteres"),
-    check('celular')
-    .isNumeric().withMessage("El celular debe contener solamente números"),
-    check('fechaNacimiento')
-    .toDate().withMessage("La fecha no es correcta"),
-    check('calle')
-    .isString().withMessage("La calle debe tener solo letras")
-    .isLength({
-        min: 1,
-        max: 30
-    }).withMessage("La calle debe contener minimo 1 caracter y máximo 30"),
-    check('numero')
-    .isNumeric().withMessage("El número no puede contener letras")
-    .isLength({
-        min: 1,
-        max: 5
-    }).withMessage("El número debe tener mínimo un caracter"),
-    check('codigoPostal')
-    .isNumeric().withMessage("El código postal debe tener solo números")
-    .isLength({
-        min: 1
-    }).withMessage("El número debe tener mínimo un caracter")
-], (req, res) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-        showError(errors.array(), function(result) {
-            res.status(500).json(result);
-        });
-    } else {
-        let user = getData(req);
-        usuarioRepositorio.put(user, function(result) {
+    router.delete('/:id', (req, res) => {
+        usuarioRepositorio.deletee(req.params.id, function(result) {
             res.status(result.status);
             res.end();
         });
-    }
-});
-
-users.delete('/user/:id', (req, res) => {
-    usuarioRepositorio.deletee(req.params.id, function(result) {
-        res.status(result.status);
-        res.end();
     });
 });
 
